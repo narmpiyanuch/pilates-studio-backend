@@ -6,6 +6,78 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum paymentType {
+  QRCODE
+  CREDIT
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  password     String
+  email        String        @unique
+  mobile       String        @unique
+  profileImg   String?
+  role         Role
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
+  transactions Transaction[]
+  reservations Reservation[]
+  sessions     Session[]
+}
+
+model Transaction {
+  id         Int         @id @default(autoincrement())
+  amount     String
+  price      String
+  paymentImg String
+  status     Boolean     @default(false)
+  type       paymentType
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now())
+  user       User        @relation(fields: [userId], references: [id])
+  userId     Int
+  Session    Session[]
+}
+
+model Classroom {
+  id           Int           @id @default(autoincrement())
+  classname    String
+  time         String
+  userlimit    String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
+  reservations Reservation[]
+}
+
+model Reservation {
+  id          Int       @id @default(autoincrement())
+  date        DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  classroom   Classroom @relation(fields: [classroomId], references: [id])
+  classroomId Int
+}
+
+model Session {
+  id            Int         @id @default(autoincrement())
+  amount        String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  user          User        @relation(fields: [userId], references: [id])
+  userId        Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId Int
 }

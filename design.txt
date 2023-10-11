@@ -1,0 +1,27 @@
+REGISTER 
+POST /auth/register 
+BODY { firstName: String, lastName: String, password: string, email: String, mobile: String, profileImg?: String}
+RESPONSE 
+201 { accessToken : String, user }
+400 { message : String }
+500 { message : String }
+
+LOGIN (USER)
+POST /auth/login 
+BODY { email: String, password : String }
+RESPONSE
+200 { accessToken: String, user }
+400 { message : String }
+500 { message : String }
+
+
+ADD CLASSROOM
+POST /post/createclass
+HEADER AUTHORIZATION Bearer ACCESS_TOKEN
+BODY { classname : String, time : DateTime, userlimit: String }
+RESPONSE
+201 { message: String }
+400 { message: String }
+401 { message: String } unauthenticate
+500 { message: String } server error
+
