@@ -4,7 +4,12 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const authRoute = require('./routes/authRoute')
-const classRoute = require('./routes/classRoute');
+const adminRoute = require('./routes/adminRoute');
+const userRoute = require('./routes/userRoute');
+const packageRoute = require('./routes/packageRoute');
+const transactionRoute = require('./routes/transactionRoute');
+const reservationRoute = require('./routes/reservationRoute');
+
 const errorMiddleware = require('./middlewares/error');
 const notFoundMiddleware = require('./middlewares/not-found');
 
@@ -16,7 +21,11 @@ app.use(express.json());
 
 
 app.use('/auth', authRoute);
-app.use('/post', classRoute);
+app.use('/admin', adminRoute);
+app.use('/user', userRoute);
+app.use('/packages', packageRoute);
+app.use('/transaction', transactionRoute);
+app.use('/reservation', reservationRoute);
 
 
 app.use(notFoundMiddleware);

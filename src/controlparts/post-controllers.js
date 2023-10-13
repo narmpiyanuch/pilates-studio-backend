@@ -1,15 +1,10 @@
 const prisma = require('../utils/prisma');
 const createError = require('../utils/createError');
-const { createClassSchema } = require('../validators/auth-validate')
+const { createClassSchema, createPackageSchema } = require('../validators/auth-validate')
 
 exports.createClassName = async (req, res, next) => {
     try {
-        console.log('here')
         const { value, error } = createClassSchema.validate(req.body);
-        const time_range = value.time;
-        console.log(time_range)
-        console.log(error)
-        console.log(value)
         if (error) {
             return next(error);
         }
@@ -19,5 +14,30 @@ exports.createClassName = async (req, res, next) => {
         res.status(201).json({ message: 'Classroom is created', classroom })
     } catch (err) {
         next(err);
+    }
+};
+
+exports.createPackage = async (req, res, next) => {
+    try {
+        const { value, error } = createPackageSchema.validate(req.body);
+        if (error) {
+            return next(error);
+        }
+        const package = await prisma.package.create({
+            data: value
+        });
+        res.status(201).json({ message: 'Package is created', package })
+    } catch (err) {
+        next(err)
+    }
+};
+
+exports.getPackage = async (req, res, next) => {
+    try {
+        const packages = await prisma.package.findMany({})
+        // console.log(packages)
+        res.status(200).json({ packages })
+    } catch (err) {
+        next(err)
     }
 };

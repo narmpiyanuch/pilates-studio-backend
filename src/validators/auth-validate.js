@@ -9,7 +9,8 @@ const registerSchema = Joi.object({
         .required(),
     confirmpassword: Joi.string().valid(Joi.ref("password")).trim().required().strip(),
     mobile: Joi.string().pattern(/^[0-9]{10}$/).required(),
-    email: Joi.string().email().required()
+    email: Joi.string().email().required(),
+    profileImg: Joi.string().allow('')
 });
 
 exports.registerSchema = registerSchema;
@@ -28,3 +29,12 @@ const createClassSchema = Joi.object({
 });
 
 exports.createClassSchema = createClassSchema;
+
+const createPackageSchema = Joi.object({
+    packageName: Joi.string().trim().required(),
+    amountTotal: Joi.string().trim().required(),
+    pricePerTime: Joi.string().trim().required(),
+    totalPrice: Joi.string().trim().required()
+})
+
+exports.createPackageSchema = createPackageSchema;

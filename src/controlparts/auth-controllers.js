@@ -1,7 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fs = require('fs/promises');
+
 const prisma = require('../utils/prisma');
 const createError = require('../utils/createError');
+const { upload } = require('../utils/cloudinary-service');
 
 const { registerSchema, loginSchema } = require('../validators/auth-validate');
 
@@ -12,13 +15,20 @@ exports.register = async (req, res, next) => {
         if (error) {
             return next(error);
         }
+
+        let url = ''
+        //console.log(req.file)
+        if (req.file) {
+            url = await upload(req.file.path)
+            console.log(url)
+        }
         value.password = await bcrypt.hash(value.password, 11);
-        console.log(value.password)
+        // console.log(value.password)
         const user = await prisma.user.create({
             data: {
                 ...value,
-                profileImg: req.body.profileImg,
-                role: 'USER'
+                role: 'USER',
+                profileImg: url
             }
         })
         const payload = { userId: user.id }
@@ -29,6 +39,10 @@ exports.register = async (req, res, next) => {
         res.status(201).json({ accessToken, user });
     } catch (err) {
         next(err)
+    } finally {
+        if (req.file.path) {
+            fs.unlink(req.file.path);
+        }
     }
 };
 
