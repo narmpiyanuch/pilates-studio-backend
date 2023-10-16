@@ -24,7 +24,7 @@ app.use('/auth', authRoute);
 app.use('/admin', adminRoute);
 app.use('/user', userRoute);
 app.use('/packages', packageRoute);
-app.use('/transaction', transactionRoute);
+app.use('/', transactionRoute);
 app.use('/reservation', reservationRoute);
 
 
