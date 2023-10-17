@@ -32,7 +32,7 @@ exports.createClassSchema = createClassSchema;
 
 const createPackageSchema = Joi.object({
     packageName: Joi.string().trim().required(),
-    amountTotal: Joi.string().trim().required(),
+    amountTotal: Joi.number().required(),
     pricePerTime: Joi.string().trim().required(),
     totalPrice: Joi.string().trim().required()
 })
