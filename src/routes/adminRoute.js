@@ -2,7 +2,7 @@ const express = require("express");
 
 const authenticateMiddleware = require("../middlewares/authenticate");
 const authAdmin = require('../middlewares/authadmin');
-const postController = require("../controlparts/post-controllers");
+const classController = require("../controlparts/class-controllers");
 const transactionController = require("../controlparts/transaction-controller");
 
 const router = express.Router();
@@ -11,13 +11,13 @@ router.post(
     "/createclass",
     authenticateMiddleware,
     authAdmin,
-    postController.createClassName
+    classController.createClassName
 );
 router.post(
     "/createpackage",
     authenticateMiddleware,
     authAdmin,
-    postController.createPackage
+    classController.createPackage
 );
 
 router.get(

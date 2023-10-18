@@ -1,11 +1,11 @@
 const express = require('express');
 
 const authenticateMiddleware = require('../middlewares/authenticate');
-const postController = require('../controlparts/post-controllers')
+const classController = require('../controlparts/class-controllers')
 
 const router = express.Router();
 
 
-router.get('/', authenticateMiddleware, postController.getPackage)
+router.get('/', authenticateMiddleware, classController.getPackage)
 
 module.exports = router;

@@ -25,7 +25,7 @@ app.use('/admin', adminRoute);
 app.use('/user', userRoute);
 app.use('/packages', packageRoute);
 app.use('/', transactionRoute);
-app.use('/reservation', reservationRoute);
+app.use('/reserve', reservationRoute);
 
 
 app.use(notFoundMiddleware);

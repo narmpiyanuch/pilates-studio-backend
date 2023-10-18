@@ -35,6 +35,6 @@ const createPackageSchema = Joi.object({
     amountTotal: Joi.number().required(),
     pricePerTime: Joi.string().trim().required(),
     totalPrice: Joi.string().trim().required()
-})
+});
 
 exports.createPackageSchema = createPackageSchema;
