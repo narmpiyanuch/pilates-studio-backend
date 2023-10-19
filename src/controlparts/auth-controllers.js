@@ -16,17 +16,17 @@ exports.register = async (req, res, next) => {
             return next(error);
         }
 
-        let url = ''
-        if (req.file) {
-            url = await upload(req.file.path)
-            console.log(url)
-        }
+        // let url = ''
+        // if (req.file) {
+        //     url = await upload(req.file.path)
+        //     console.log(url)
+        // }
         value.password = await bcrypt.hash(value.password, 11);
         const user = await prisma.user.create({
             data: {
                 ...value,
                 role: 'USER',
-                profileImg: url
+                // profileImg: url
             }
         })
         const payload = { userId: user.id }
@@ -37,10 +37,6 @@ exports.register = async (req, res, next) => {
         res.status(201).json({ accessToken, user });
     } catch (err) {
         next(err)
-    } finally {
-        if (req.file.path) {
-            fs.unlink(req.file.path);
-        }
     }
 };
 

@@ -34,4 +34,10 @@ router.put(
     transactionController.updateSession
 );
 
+router.get("/reservation",
+    authenticateMiddleware,
+    authAdmin,
+    classController.getAllReserve
+);
+
 module.exports = router;

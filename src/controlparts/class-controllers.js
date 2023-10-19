@@ -1,6 +1,8 @@
+const cron = require('node-cron')
 const prisma = require('../utils/prisma');
 const createError = require('../utils/createError');
-const { createClassSchema, createPackageSchema } = require('../validators/auth-validate')
+const { createClassSchema, createPackageSchema } = require('../validators/auth-validate');
+
 //const { reserveClassSchema } = require('../validators/reserve-validate');
 
 exports.createClassName = async (req, res, next) => {
@@ -36,7 +38,6 @@ exports.createPackage = async (req, res, next) => {
 exports.getPackage = async (req, res, next) => {
     try {
         const packages = await prisma.package.findMany({})
-        // console.log(packages)
         res.status(200).json({ packages })
     } catch (err) {
         next(err)
@@ -78,7 +79,7 @@ exports.reserveClass = async (req, res, next) => {
                 }
             })
         }
-        res.status(201).json({ message: "Successful", reserved, session })
+        res.status(201).json({ reserved })
     } catch (err) {
         next(err)
     }
@@ -88,7 +89,13 @@ exports.getReserveList = async (req, res, next) => {
     try {
         const reservelists = await prisma.reservation.findMany({
             where: {
-                userId: req.user.id
+                AND: [
+                    { userId: req.user.id }, {
+                        date: {
+                            gte: new Date()
+                        }
+                    }
+                ]
             },
             select: {
                 id: true,
@@ -105,6 +112,7 @@ exports.getReserveList = async (req, res, next) => {
                 }
             }
         });
+
         res.status(200).json({ reservelists })
     } catch (err) {
         nect(err)
@@ -113,6 +121,7 @@ exports.getReserveList = async (req, res, next) => {
 
 exports.cancelClass = async (req, res, next) => {
     try {
+        // add validate Joi
         const { reserveId } = req.params;
         const cancel = await prisma.reservation.delete({
             where: {
@@ -140,3 +149,27 @@ exports.cancelClass = async (req, res, next) => {
         console.log(err)
     }
 };
+
+exports.getAllReserve = async (req, res, next) => {
+    try {
+        const allReserve = await prisma.reservation.findMany({
+            select: {
+                id: true,
+                date: true,
+                user: {
+                    select: {
+                        firstName: true,
+                    }
+                },
+                classroom: {
+                    select: {
+                        classname: true
+                    }
+                }
+            }
+        });
+        res.status(200).json({ allReserve })
+    } catch (err) {
+        console.log(err)
+    }
+}
