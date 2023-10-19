@@ -17,13 +17,11 @@ exports.register = async (req, res, next) => {
         }
 
         let url = ''
-        //console.log(req.file)
         if (req.file) {
             url = await upload(req.file.path)
             console.log(url)
         }
         value.password = await bcrypt.hash(value.password, 11);
-        // console.log(value.password)
         const user = await prisma.user.create({
             data: {
                 ...value,
