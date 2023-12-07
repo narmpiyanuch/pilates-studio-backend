@@ -13,10 +13,7 @@
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "app.js",
-        "headers": {
-          "Access-Control-Allow-Origin": "*"
-        }
+        "dest": "app.js"
       }
     ]
   }
